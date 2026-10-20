@@ -1,0 +1,183 @@
+/*
+ * Shared styles. Every selector is namespaced with .site- so this file can be
+ * included in the game page without affecting the game's own styles.
+ */
+
+/* ---------- Shared menu ---------- */
+.site-header {
+  position: relative;
+  z-index: 10; /* below the game's popups/overlays (z-index: 20) */
+  background: #11111c;
+  border-bottom: 4px solid #ff8c00;
+  font: 600 16px/1.3 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color: #fff;
+  text-shadow: none;
+}
+
+.site-header *,
+.site-page *,
+.site-page *::before,
+.site-page *::after {
+  box-sizing: border-box;
+}
+
+.site-nav {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 6px 12px;
+}
+
+.site-nav__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-nav__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 6px 14px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-nav__link:hover {
+  background: #2a2a40;
+  border-color: #3d3d5c;
+}
+
+.site-nav__link:focus-visible {
+  outline: 3px solid #ffcf3a;
+  outline-offset: 2px;
+}
+
+.site-nav__link[aria-current="page"] {
+  background: #ff8c00;
+  border-color: #ffcf3a;
+  color: #1b1b2b;
+}
+
+@media (max-width: 600px) {
+  .site-nav { padding: 6px 8px; }
+  .site-nav__list { gap: 4px; }
+  .site-nav__link { padding: 6px 10px; font-size: 15px; }
+}
+
+/* ---------- Content pages (home, placeholders) ---------- */
+body.site-page {
+  margin: 0;
+  min-height: 100vh;
+  background: #1b1b2b;
+  color: #f2f2f7;
+  font: 400 17px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.site-main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.site-main h1 {
+  margin: 8px 0 12px;
+  font-size: clamp(28px, 6vw, 44px);
+  line-height: 1.15;
+  color: #ffcf3a;
+}
+
+.site-main a {
+  color: #ffcf3a;
+}
+
+.site-main a:focus-visible {
+  outline: 3px solid #ffcf3a;
+  outline-offset: 2px;
+}
+
+.site-lead {
+  font-size: 1.1em;
+  max-width: 680px;
+}
+
+.site-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #3d3d5c;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.site-badge--ready {
+  background: #5cb338;
+  color: #10240a;
+}
+
+.site-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 18px;
+  border: 2px solid #3d3d5c;
+  border-radius: 12px;
+  background: #24243a;
+}
+
+.site-card h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.site-card p {
+  margin: 0;
+  flex: 1;
+}
+
+.site-main .site-button {
+  align-self: flex-start;
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #ff8c00;
+  color: #1b1b2b;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.site-main .site-button:hover {
+  background: #ffa640;
+}
+
+.site-note {
+  margin-top: 24px;
+  padding: 14px 16px;
+  border-left: 4px solid #ffcf3a;
+  background: #24243a;
+  border-radius: 0 8px 8px 0;
+}
+
+.site-pager {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
