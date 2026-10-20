@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>THE FLOOR IS LAVA — Present Simple Challenge</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font:700 18px "Courier New",Consolas,monospace;color:#fff;background:#1b1b2b;min-height:100vh;overflow-x:hidden}
+button{font:inherit;cursor:pointer}[hidden]{display:none!important}
+.btn{background:#5cb338;color:#fff;border:4px solid #1a3a0c;box-shadow:inset -4px -4px 0 #3a7a1e,inset 4px 4px 0 #8ee060,0 5px 0 #1a3a0c;padding:10px 20px;text-shadow:2px 2px 0 #1a3a0c;margin:4px}
+.btn:hover{filter:brightness(1.1)}.btn:active{transform:translateY(3px)}.btn.o{background:#e8742a;border-color:#5a2208;box-shadow:inset -4px -4px 0 #b4501a,inset 4px 4px 0 #ffa660,0 5px 0 #5a2208;text-shadow:2px 2px 0 #5a2208}.btn.g{background:#777;border-color:#222;box-shadow:inset -4px -4px 0 #555,inset 4px 4px 0 #aaa,0 5px 0 #222;text-shadow:2px 2px 0 #222}
+.sky{background:linear-gradient(#5fb8f5,#bfe6ff 70%)}
+#start{min-height:100vh;padding-bottom:110px!important;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px;position:relative;overflow:hidden}
+#start h1{font-size:clamp(32px,8vw,76px);margin:0;color:#ffcf3a;text-shadow:4px 4px 0 #7a2a00,8px 8px 0 #0004;letter-spacing:2px}#start h2{margin:4px 0 14px;color:#fff;text-shadow:3px 3px 0 #1c4a73}
+.lavab{z-index:0;pointer-events:none;position:absolute;left:0;right:0;bottom:0;height:90px;background:repeating-linear-gradient(90deg,#ff5a00 0 40px,#ff8c00 40px 80px);border-top:8px solid #ffd23a;animation:lv 3s linear infinite}@keyframes lv{to{background-position:80px 0}}
+#start>*:not(.lavab){position:relative;z-index:1}.chars{display:flex;gap:14px;justify-content:center;margin:10px}.cc{background:#fff6;border:5px solid #333;padding:8px;width:104px}.cc.sel{background:#fff;border-color:#ffcf3a;transform:scale(1.1)}
+.cc svg{width:48px;height:96px;display:block;margin:auto}input{font:inherit;padding:8px;border:4px solid #333;width:230px;text-align:center}
+.card{background:#000a;border:4px solid #333;padding:12px;max-width:560px;position:relative}
+#game{height:100vh;display:flex;flex-direction:column}.hud{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:space-between;padding:6px 10px;background:#222;border-bottom:5px solid #000}
+.hud .btn{padding:4px 10px;margin:2px;font-size:15px}.bar{height:14px;width:160px;background:#000;border:3px solid #555;display:inline-block;vertical-align:middle}.bar i{display:block;height:100%;background:#5cb338;width:0;transition:width .5s}
+#scene{flex:1;position:relative;overflow:hidden;min-height:340px}#world{position:absolute;left:0;top:0;bottom:0;width:3800px;transition:transform .8s ease}
+#lava{position:absolute;left:0;right:0;bottom:0;height:17%;background:repeating-linear-gradient(90deg,#ff4a00 0 36px,#ff9000 36px 72px);border-top:8px solid #ffd23a;animation:lv 2.5s linear infinite;z-index:3}
+#lava::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 30%,#ffe27a 0 6px,#0000 7px),radial-gradient(circle at 70% 60%,#ffe27a 0 5px,#0000 6px);background-size:140px 60px;animation:lv 4s linear infinite}
+.cloud{position:absolute;width:120px;height:36px;background:#fff;box-shadow:36px -22px 0 #fff,70px 0 0 #fff;opacity:.9}
+.stone{position:absolute;width:100px;height:46px;transform:translate(-50%,0) scale(var(--s,1));transform-origin:50% 0;transition:transform .6s,opacity .6s;border:4px solid #2a2a2a;background:radial-gradient(#9a9a9a 0 2px,#0000 3px) 0 0/16px 16px,linear-gradient(#a6a6a6,#7d7d7d);box-shadow:inset -6px -6px 0 #5e5e5e,inset 6px 6px 0 #c4c4c4,0 14px 0 #4a4a4a;color:#222;text-shadow:none;z-index:2;padding:0}
+.stone b{position:absolute;top:-30px;left:50%;transform:translateX(-50%);font-size:13px;color:#fff;text-shadow:2px 2px 0 #000;white-space:nowrap;pointer-events:none}
+.stone.on{animation:pu 1s infinite alternate;outline:4px solid #ffcf3a}.stone:disabled{cursor:default}.stone.past{opacity:.55}.stone.gone{transform:translate(-50%,300px) scale(0);opacity:0}
+@keyframes pu{to{filter:brightness(1.3)}}
+.grass{position:absolute;width:150px;height:52px;transform:translateX(-50%);background:linear-gradient(#5cb338 0 18px,#8a5a2b 18px);border:4px solid #2a2a2a;box-shadow:0 14px 0 #5a3a1a;z-index:2}
+#hero{position:absolute;width:36px;height:72px;transition:left .75s linear,top .75s cubic-bezier(.3,1.6,.6,1);z-index:4}#hero svg{width:36px;height:72px;display:block}
+#hero.hop svg{animation:hop .75s}@keyframes hop{40%{transform:translateY(-70px)}}#hero.fall{transition:left .5s linear,top 1.1s ease-in,transform 1.1s;transform:rotate(200deg)}#hero.win svg{animation:win .5s infinite alternate}@keyframes win{to{transform:translateY(-20px) rotate(10deg)}}
+.pf{position:absolute;width:10px;height:10px;z-index:5;animation:pf .9s forwards;pointer-events:none}@keyframes pf{to{transform:translate(var(--dx),var(--dy));opacity:0}}
+#pop,#ov{position:fixed;inset:0;background:#000a;display:flex;align-items:center;justify-content:center;z-index:20;padding:10px}
+.qc{background:#c6c6c6;color:#222;border:6px solid #222;box-shadow:inset 6px 6px 0 #fff,inset -6px -6px 0 #888;padding:18px;width:min(560px,100%);text-align:center;text-shadow:none}
+.qc h3{margin:6px 0;font-size:clamp(22px,5vw,34px)}.qc .meta{display:flex;justify-content:space-between;font-size:14px;gap:8px}.qc .ans{display:block;width:100%;margin:8px 0;text-align:left;font-size:clamp(18px,4vw,24px);padding:12px;background:#fff;border:4px solid #222;box-shadow:inset -4px -4px 0 #bbb}
+.ans:hover:not(:disabled){background:#fff3b0}.ans.ok{background:#5cb338;color:#fff}.ans.no{background:#e04040;color:#fff}.ans:disabled{cursor:default}
+.msg{min-height:50px;font-size:17px}.mini svg{width:24px;height:48px}
+#ov .qc{background:#333;color:#fff;box-shadow:inset 6px 6px 0 #666}#rep{width:100%;height:120px;font:13px monospace}
+@media(max-width:600px){body{font-size:15px}.stone{width:80px}}
+/* Shared site menu sits above the game: keep the game filling the rest of the viewport */
+body{display:flex;flex-direction:column}#start{flex:1 0 auto;min-height:0}#game{flex:1 0 auto;height:auto}
+</style>
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/menu.js" defer></script>
+</head><body>
+<header class="site-header" lang="ru">
+<nav class="site-nav" aria-label="Меню сайта" data-site-menu="menu.html"><ul class="site-nav__list"><li><a class="site-nav__link" href="index.html">Главная</a></li><li><a class="site-nav__link" href="menu.html">Все разделы</a></li></ul></nav>
+</header>
+<section id="start" class="sky"><div class="cloud" style="left:6%;top:8%"></div><div class="cloud" style="right:8%;top:16%"></div>
+<h1>THE FLOOR IS LAVA</h1><h2>Present Simple Challenge</h2><div id="chars" class="chars"></div>
+<div class="card"><p>Choose the correct answer and jump across the stones!</p><input id="nick" maxlength="12" placeholder="Nickname (optional)"><br><button class="btn" id="go">START GAME</button></div><div class="lavab"></div></section>
+<section id="game" hidden><div class="hud"><span>Stone <b id="hs">1</b>/20 <span class="bar"><i id="hb"></i></span></span><span>★ <b id="hst">0</b> · Score <b id="hsc">0</b></span><span><button class="btn g" id="bp">Pause</button><button class="btn g" id="bs">Sound: ON</button><button class="btn o" id="bn">New game</button></span></div>
+<div id="scene" class="sky"><div id="world"></div><div id="lava"></div></div></section>
+<div id="pop" hidden></div><div id="ov" hidden></div>
+<script>
+'use strict';
+const $=s=>document.querySelector(s),shuf=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* ===== EDITABLE QUESTION BANK: {text, options, correct (index), cat, hint, explain, feedback} ===== */
+const CAT={S:'He / She / It + verb-s',B:'I / You / We / They + base verb',N:"Don't vs. doesn't",D:'Do vs. does',V:'Base verb after does / doesn\'t'};
+const RULE={S:'He / She / It + verb-s (he plays).',B:'I / You / We / They: the verb has no -s (they run).',N:"Don't = I / you / we / they. Doesn't = he / she / it.",D:'Do = I / you / we / they. Does = he / she / it.',V:'After does / doesn\'t use the base verb, with no -s (Does he play? He doesn\'t play).'};
+const mk=(t,o,c,cat,h,fb)=>({text:t,options:o,correct:c,cat,hint:h,explain:RULE[cat],feedback:fb||''});
+const BANK=[
+mk('He ___ football every day.',['play','plays','playing'],1,'S','Who is it? He / she / it needs a special ending.'),
+mk('She ___ apples.',['like','likes','liking'],1,'S','Who is it? He / she / it needs a special ending.'),
+mk('They ___ in the park.',['run','runs','running'],0,'B','They is more than one. Does the verb need -s?'),
+mk('It ___ fast.',['run','runs','running'],1,'S','It is like he and she. Look at the verb ending.'),
+mk('We ___ books.',['reads','read','reading'],1,'B','We is more than one. Does the verb need -s?'),
+mk('He ___ football.',["don't play","doesn't play","doesn't plays"],1,'V','Use the helper for he. Then look at the verb: no -s!'),
+mk('She ___ milk.',["doesn't drink","don't drink","doesn't drinks"],0,'V','Use the helper for she. Then look at the verb: no -s!'),
+mk('They ___ fish.',["doesn't eat","don't eat","don't eats"],1,'N','They is more than one. Which helper is for they?'),
+mk('It ___ at night.',["don't sleep","doesn't sleeps","doesn't sleep"],2,'V','After doesn\'t the verb stays short.'),
+mk('I ___ TV in the morning.',["doesn't watch","don't watch","don't watches"],1,'N','I uses don\'t. The verb has no -s.'),
+mk('___ he play football?',['Do','Does','Is'],1,'D','Who is it? He needs the helper with -s.'),
+mk('___ they like apples?',['Does','Do','Are'],1,'D','They is more than one.'),
+mk('___ she read books?',['Does','Do','Is'],0,'D','Who is it? She needs the helper with -s.'),
+mk('___ you swim?',['Does','Do','Are'],1,'D','You uses the helper without -s.'),
+mk('Does it ___ fast?',['runs','running','run'],2,'V','After does the verb stays short.'),
+mk('Choose the correct sentence.',["He don't play.","He doesn't play.","He doesn't plays."],1,'V','He needs doesn\'t. The verb has no -s.'),
+mk('Choose the correct sentence.',['Does she likes apples?','Do she like apples?','Does she like apples?'],2,'V','She needs does. Then the verb is short.'),
+mk('Choose the correct sentence.',['My cat sleeps.','My cat sleep.','My cat sleeping.'],0,'S','My cat = it. Look at the verb ending.'),
+mk('They ___ like milk.',["doesn't","don't","isn't"],1,'N','They is more than one. Which helper is for they?'),
+mk('Choose the correct sentence.',['Does he plays?',"He doesn't plays.","He doesn't play."],2,'V','Check the verb after does / doesn\'t: no -s!')];
+/* ===== Characters ===== */
+const CH=[{n:'Blue',hair:'#4a2f1b',shirt:'#2aa5b5',pants:'#3b4cc0',skin:'#c58c5e'},{n:'Red',hair:'#e8c040',shirt:'#d94a4a',pants:'#444',skin:'#f0c8a0'},{n:'Green',hair:'#222',shirt:'#6bbf3a',pants:'#8a5a2b',skin:'#8d5a3b'}];
+const svg=c=>`<svg viewBox="0 0 12 24" shape-rendering="crispEdges"><rect x="2" y="0" width="8" height="3" fill="${c.hair}"/><rect x="2" y="2" width="8" height="6" fill="${c.skin}"/><rect x="2" y="2" width="8" height="1" fill="${c.hair}"/><rect x="3" y="5" width="2" height="1" fill="#222"/><rect x="7" y="5" width="2" height="1" fill="#222"/><rect x="2" y="8" width="8" height="8" fill="${c.shirt}"/><rect x="0" y="8" width="2" height="8" fill="${c.skin}"/><rect x="10" y="8" width="2" height="8" fill="${c.skin}"/><rect x="2" y="16" width="4" height="8" fill="${c.pants}"/><rect x="6" y="16" width="4" height="8" fill="#2a2a60"/></svg>`;
+/* ===== State ===== */
+const N=20,X=s=>230+s*150,TOP=(s,side)=>side?60+(s*5%9):28+(s*7%10),SK=[1,.85,.7,.55,.4,0];
+let S={ch:0,sound:true,pause:false,busy:false,nick:''},A;
+function snd(f,d,t){if(!S.sound)return;try{const c=S.ac=S.ac||new(window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();o.type=t||'square';o.frequency.value=f;g.gain.value=.05;o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+d)}catch(e){}}
+/* ===== Start screen ===== */
+$('#chars').innerHTML=CH.map((c,i)=>`<button class="cc ${i==S.ch?'sel':''}" data-c="${i}">${svg(c)}${c.n}</button>`).join('');
+$('#chars').onclick=e=>{const b=e.target.closest('[data-c]');if(!b)return;S.ch=+b.dataset.c;document.querySelectorAll('.cc').forEach((x,i)=>x.classList.toggle('sel',i==S.ch))};
+$('#go').onclick=()=>{S.nick=$('#nick').value.trim().slice(0,12);newGame()};
+/* ===== Game ===== */
+function newGame(){A={ord:shuf(BANK.map((_,i)=>i)),step:0,dmg:{},mis:0,log:BANK.map(()=>({t:0,w:[],ok:0,fell:0})),score:0,stars:0,first:0,bad:0,falls:0,side:0};
+$('#start').hidden=true;$('#game').hidden=false;$('#ov').hidden=true;$('#pop').hidden=true;S.busy=false;S.pause=false;$('#bp').textContent='Pause';build();resetLevel()}
+function build(){let h='';for(let i=0;i<5;i++)h+=`<div class="cloud" style="left:${300+i*700}px;top:${6+i*5}%"></div>`;
+h+='<div class="grass" style="left:90px;top:50%"></div>';
+for(let s=0;s<N;s++)for(let d=0;d<2;d++)h+=`<button class="stone" id="st${s}_${d}" data-s="${s}" data-d="${d}" style="left:${X(s)}px;top:${TOP(s,d)}%" aria-label="${d?'Right':'Left'} stone ${s+1}"><b>${d?'RIGHT':'LEFT'}</b></button>`;
+const mx=X(N)+60;h+=`<svg style="position:absolute;left:${mx-120}px;bottom:14%;width:440px;height:60%;z-index:1" viewBox="0 0 44 36" shape-rendering="crispEdges"><path d="M0 36V28h6v-6h6v-6h6v-6h6v-6h6V4h4v6h4v6h4v6h4v6h4v6z" fill="#6b6b78"/><path d="M18 6h8v4h-8zM14 10h16v4H14z" fill="#fff"/><rect x="21" y="-2" width="1" height="8" fill="#5a3a1a"/><path d="M22 -2h6v3h-6z" fill="#e04040"/><rect x="30" y="26" width="8" height="6" fill="#c9891a"/><rect x="30" y="26" width="8" height="2" fill="#ffd23a"/><rect x="33" y="28" width="2" height="2" fill="#333"/></svg>`;
+h+='<div id="hero"></div>';$('#world').innerHTML=h;$('#hero').innerHTML=svg(CH[S.ch]);document.querySelectorAll('.stone').forEach(b=>b.onclick=()=>openQ(+b.dataset.s,+b.dataset.d))}
+function place(x,top){const h=$('#hero');h.style.left=(x-18)+'px';h.style.top=`calc(${top}% - 68px)`;$('#world').style.transform=`translateX(${-Math.max(0,Math.min(x-260,3800-innerWidth))}px)`}
+function resetLevel(){A.step=0;A.dmg={};A.mis=0;S.busy=false;const h=$('#hero');h.className='';h.style.transition='none';place(90,50);void h.offsetWidth;h.style.transition='';document.querySelectorAll('.stone').forEach(b=>{b.style.setProperty('--s',1);b.classList.remove('gone','past')});upd()}
+function shrink(){document.querySelectorAll(".stone").forEach(b=>{if(+b.dataset.s>=A.step)b.style.setProperty("--s",SK[Math.min(A.mis,4)])})}
+function upd(){document.querySelectorAll('.stone').forEach(b=>{const s=+b.dataset.s,on=s==A.step;b.classList.toggle('on',on);b.disabled=!on||S.busy||S.pause;b.classList.toggle('past',s<A.step)});
+$('#hs').textContent=Math.min(A.step+1,N);$('#hb').style.width=A.step/N*100+'%';$('#hst').textContent=A.stars;$('#hsc').textContent=A.score}
+function burst(x,top,c){const w=$('#world');for(let i=0;i<12;i++){const p=document.createElement('i');p.className='pf';p.style.cssText=`left:${x}px;top:calc(${top}% - 20px);background:${c};--dx:${(Math.random()-.5)*160}px;--dy:${-20-Math.random()*90}px`;w.appendChild(p);setTimeout(()=>p.remove(),950)}}
+/* ===== Question popup ===== */
+function qi(){return A.ord[A.step]}
+function openQ(s,d){if(S.busy||S.pause||s!=A.step)return;A.side=d;snd(440,.08);renderQ('')}
+function renderQ(msg,pick,done){const q=BANK[qi()],m=A.mis,p=$('#pop');p.hidden=false;
+p.innerHTML=`<div class="qc"><div class="meta"><span class="mini">${svg(CH[S.ch])}</span><span>Question ${A.step+1} of ${N}<br>You chose: <b>${A.side?'RIGHT':'LEFT'} STONE</b></span><span>Mistakes in this level:<br><b>${m} / 5</b></span></div>
+<p style="margin:4px">${/___/.test(q.text)?'Choose the correct answer.':''}</p><h3>${esc(q.text).replace('___','<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>')}</h3>
+${q.options.map((o,i)=>`<button class="ans ${pick===i?(i==q.correct?'ok':'no'):''}" data-k="${i}" ${done||pick===i?'disabled':''}>${'ABC'[i]}. ${esc(o)}</button>`).join('')}
+<div class="msg">${msg}</div>${done?'':'<button class="btn g" id="back">Choose another stone</button>'}</div>`;
+if(!done){p.querySelectorAll('.ans').forEach(b=>b.onclick=()=>answer(+b.dataset.k));$('#back').onclick=()=>{p.hidden=true}}}
+function answer(k){if(S.busy||S.pause)return;const q=BANK[qi()],L=A.log[qi()],key=A.step+'_'+A.side;L.t++;
+if(k==q.correct){S.busy=true;snd(660,.12);setTimeout(()=>snd(880,.15),120);if(!L.ok){L.ok=1;A.stars++;A.score+=L.t==1&&!L.w.length?10:5;if(!L.w.length)A.first++}
+renderQ('Correct! Great job!'+(q.feedback?' '+esc(q.feedback):''),k,true);const x=X(A.step),top=TOP(A.step,A.side);setTimeout(()=>{$('#pop').hidden=true;hop(x,top)},900)}
+else{snd(160,.25,'sawtooth');L.w.push(q.options[k]);A.bad++;const n=++A.mis;shrink();
+if(n>=5){S.busy=true;L.fell++;A.falls++;renderQ('Oh no!',k,true);setTimeout(()=>fall(A.step,A.side),600)}else renderQ('Oops! Try again! Hint: '+esc(q.hint),k)}upd()}
+function hop(x,top){const h=$('#hero');h.classList.add('hop');place(x,top);burst(x,top,'#5cb338');burst(x,top,'#ffd23a');setTimeout(()=>{h.classList.remove('hop');A.step++;if(A.step>=N)return finish();S.busy=false;upd()},800)}
+function fall(s,d){$('#pop').hidden=true;const h=$('#hero'),x=X(s);place(x,TOP(s,d));setTimeout(()=>{$('#st'+s+'_'+d).classList.add('gone');h.classList.add('fall');h.style.top='110%';snd(120,.6,'sawtooth');burst(x,88,'#ff8c00')},850);
+setTimeout(()=>{ov(`<h2 style="color:#ff8c00">Oh no! The floor is lava!</h2><p>Don't worry. Try again from the start!</p><button class="btn o" id="rl">Restart Level</button>`);$('#rl').onclick=()=>{$('#ov').hidden=true;resetLevel()}},2100)}
+function ov(h){const o=$('#ov');o.hidden=false;o.innerHTML=`<div class="qc">${h}</div>`}
+/* ===== Win + teacher report ===== */
+function report(){const L=[],cats={};let n=0;L.push('THE FLOOR IS LAVA — TEACHER REPORT','',`Player: ${S.nick||'(no nickname)'}`,'','Questions to revise:','');
+BANK.forEach((q,i)=>{const g=A.log[i];if(!g.w.length&&!g.fell)return;n++;cats[q.cat]=(cats[q.cat]||0)+g.w.length+g.fell;
+L.push(`${n}. [Question ${i+1}] ${q.text}`,`   Student's incorrect answer(s): ${g.w.length?g.w.join(' | '):'—'}`,`   Correct answer: ${q.options[q.correct]}`,`   Grammar: ${CAT[q.cat]}`,`   Attempts: ${g.t}${g.fell?` (fell into lava ${g.fell}x, level restarted)`:''}`,`   Rule: ${q.explain}`,'')});
+if(!n)L.push('None — all 20 questions were correct on the first attempt!','');
+L.push('Most common mistake types:');Object.entries(cats).sort((a,b)=>b[1]-a[1]).forEach(([k,v])=>L.push(`- ${CAT[k]}: ${v}`));if(!n)L.push('- none');
+L.push('',`Score: ${A.score} | First-attempt correct: ${A.first}/${N} | Incorrect attempts: ${A.bad} | Falls: ${A.falls}`);return L.join('\n')}
+function finish(){S.busy=true;const h=$('#hero');h.classList.add('win');burst(X(N)+120,62,'#ffd23a');snd(784,.3);setTimeout(()=>snd(1046,.4),250);
+setTimeout(()=>{const m=A.first>=15?'Amazing! You are a Present Simple hero!':A.first>=8?'Great job! Keep practising!':'Well done! You never gave up!';
+ov(`<h2 style="color:#ffcf3a">YOU WIN!</h2><p>${S.nick?esc(S.nick)+', ':''}${m}</p><p>Questions completed: ${N}/${N}<br>Correct first attempts: ${A.first}<br>Incorrect attempts: ${A.bad}<br>Final score: ${A.score} ★${A.stars}</p><button class="btn" id="cp">COPY TEACHER REPORT</button><div id="cpm"></div><textarea id="rep" readonly hidden></textarea><br><button class="btn o" id="again">Play again</button>`);
+$('#again').onclick=newGame;$('#cp').onclick=async()=>{const t=report(),ta=$('#rep');ta.value=t;try{await navigator.clipboard.writeText(t);$('#cpm').textContent='Report copied!'}catch(e){ta.hidden=false;ta.select();let ok=false;try{ok=document.execCommand('copy')}catch(_){}$('#cpm').textContent=ok?'Report copied!':'Select the text above and copy it (Ctrl+C).'}}},1200)}
+/* ===== Controls ===== */
+$('#bp').onclick=()=>{if(!$('#ov').hidden&&!S.pause)return;S.pause=!S.pause;$('#bp').textContent=S.pause?'Resume':'Pause';if(S.pause)ov('<h2>Paused</h2><button class="btn" id="rs">Resume</button>'),$('#rs').onclick=()=>$('#bp').click();else $('#ov').hidden=true;upd()};
+$('#bs').onclick=()=>{S.sound=!S.sound;$('#bs').textContent='Sound: '+(S.sound?'ON':'OFF')};
+$('#bn').onclick=()=>{if(confirm('Start a new game? Your progress will be lost.'))newGame()};
+document.onkeydown=e=>{if($('#game').hidden)return;const k=e.key.toLowerCase();if(k=='p'){$('#bp').click();return}if(S.pause||S.busy)return;
+if(!$('#pop').hidden){const i='abc'.indexOf(k)>=0?'abc'.indexOf(k):'123'.indexOf(k);if(i>=0){const b=$('#pop').querySelector(`.ans[data-k="${i}"]`);if(b&&!b.disabled)b.click()}else if(k=='escape')$('#pop').hidden=true}
+else if(k=='arrowleft')openQ(A.step,0);else if(k=='arrowright')openQ(A.step,1)};
+</script></body></html>

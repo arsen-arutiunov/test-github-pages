@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Меню сайта — English Games</title>
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/menu.js" defer></script>
+</head>
+<body class="site-page">
+<!--
+  ЕДИНСТВЕННЫЙ источник меню сайта.
+  assets/menu.js загружает этот файл и подставляет элемент <nav class="site-nav"> ниже
+  во все страницы. Чтобы добавить пункт меню, добавьте сюда ещё один <li>.
+  Ссылки должны быть относительными (без "/" в начале), чтобы работать на
+  https://arsen-arutiunov.github.io/test-github-pages/.
+-->
+<header class="site-header">
+<nav class="site-nav" aria-label="Меню сайта" lang="ru">
+  <ul class="site-nav__list">
+    <li><a class="site-nav__link" href="index.html">Главная</a></li>
+    <li><a class="site-nav__link" href="floor-is-lava.html">Floor Is Lava</a></li>
+    <li><a class="site-nav__link" href="vocabulary.html">Словарь</a></li>
+    <li><a class="site-nav__link" href="grammar.html">Грамматика</a></li>
+  </ul>
+</nav>
+</header>
+<main class="site-main">
+  <h1>Меню сайта</h1>
+  <p>Это общий файл меню. Он подключается на всех страницах автоматически, а если загрузка не удалась — откройте нужный раздел по ссылкам выше.</p>
+</main>
+</body>
+</html>
